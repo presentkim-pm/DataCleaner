@@ -36,7 +36,7 @@ use pocketmine\utils\TextFormat;
 
 class DataCleaner extends PluginBase implements Listener{
     public function onEnable() : void{
-        $this->getServer()->getCommandMap()->register(strtolower($this->getName()), $this->makeCommand('', new class() implements CommandExecutor{
+        $this->getServer()->getCommandMap()->register(strtolower($this->getName()), $this->makeCommand('dataclean', new class() implements CommandExecutor{
             public function onCommand(CommandSender $sender, Command $command, $label, array $params) : bool{
                 if((bool) Server::getInstance()->getProperty("plugins.legacy-data-dir", true)){
                     $sender->sendMessage(TextFormat::YELLOW . "It doesn't work if the legacy folder setting is turned on");
