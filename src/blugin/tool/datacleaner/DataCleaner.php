@@ -36,19 +36,15 @@ use pocketmine\utils\TextFormat;
 
 class DataCleaner extends PluginBase implements Listener{
     public function onEnable() : void{
+        DataCleaner::cleanDataFolder();
         $this->getServer()->getCommandMap()->register(strtolower($this->getName()), $this->makeCommand('dataclean', new class() implements CommandExecutor{
             public function onCommand(CommandSender $sender, Command $command, $label, array $params) : bool{
                 if((bool) Server::getInstance()->getProperty("plugins.legacy-data-dir", true)){
                     $sender->sendMessage(TextFormat::YELLOW . "It doesn't work if the legacy folder setting is turned on");
                     return true;
                 }
-                $dataFolder = Server::getInstance()->getDataPath() . "plugin_data" . DIRECTORY_SEPARATOR;
-                foreach(array_diff(scandir($dataFolder), [".", ".."]) as $folderName){
-                    $dirname = $dataFolder . $folderName;
-                    if(is_readable($dirname) && count(scandir($dirname)) == 2){
-                        rmdir($dirname);
-                    }
-                }
+
+                DataCleaner::cleanDataFolder();
                 $sender->sendMessage("Removed empty plugin data folder");
                 return true;
             }
@@ -60,5 +56,15 @@ class DataCleaner extends PluginBase implements Listener{
         $command->setExecutor($executor);
         $command->setDescription($description);
         return $command;
+    }
+
+    public static function cleanDataFolder() : void{
+        $dataFolder = Server::getInstance()->getDataPath() . "plugin_data" . DIRECTORY_SEPARATOR;
+        foreach(array_diff(scandir($dataFolder), [".", ".."]) as $folderName){
+            $dirname = $dataFolder . $folderName;
+            if(is_readable($dirname) && count(scandir($dirname)) == 2){
+                rmdir($dirname);
+            }
+        }
     }
 }
