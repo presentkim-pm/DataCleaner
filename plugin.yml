@@ -2,7 +2,7 @@
 name: DataCleaner
 main: blugin\tool\datacleaner\DataCleaner
 version: 1.0.0
-api: [3.0.0]
+api: [4.0.0]
 author: PresentKim
 description: '[Tool] Empty plugin data folder cleaner'
 load: STARTUP
